@@ -1,65 +1,324 @@
 <template lang='pug'>
-  #app( @click='start' )
-    .background
-      .screen-outter
+  #app.screen
+    .screen-outer
+      .screen-glare
       .screen-inner
-        .screen-overlay
-        .screen
-          h2.test-heading(v-if='!testOpen && !resultOpen') programming language test
-          p.test-start(v-if='startOpen') press enter to start test
-          span.test-team pxlhead tm
-          .loading(v-if='loadingOpen')
-            span.loader-heading Loading
-            span.loader-bar {{ `[#######........]` }}
-            span.loader-percent {{ `0%` }}
-          .test(v-if='testOpen')
-            h3.test-question {{ test.question }}
-            .answers
-              span.test-answer(v-for='(n, index) in test.answer' v-bind:class='index === answerActive - 1 ? "answer--active" : "" ') {{ `&#62; ${test.answer[index]}` }}
-          .result(v-if='resultOpen')
-            span.code(v-for='(n, index) in code') {{ `${code[index]} [0%]` }}
-            .result-message(v-if='showResult')
-              h3.result-text {{ `We decide you to dive into &#60;${result[3]}&#62; world` }}
-              span.result-notification Press enter to restart
+        .start(v-if='phase == 0')
+          h1.start-title programming language test
+          p.start-notification(v-if='!loading') press enter to start test
+          span.team pxlhead tm
+          .loader(v-if='loading')
+            span.loader-title Loading
+            span.loader-bar
+            span.loader-percent
+        .test(v-if='phase == 1')
+          h3.test-question {{ activeTest.question }}
+          .test-answers
+            span.answer(v-for='(answer, index) in activeTest.answers'
+              :class='{ "answer--active": index == activeAnswer }'
+              @click='activeAnswer = index') {{ answer }}
+        .result(v-if='phase == 2')
+          .loader(v-if='loading')
+            span.loader-title {{ loaderText }}
+            span.loader-bar
+            span.loader-percent
+          .result-message(v-else)
+            h3.result-text We suggest you to try &#60;{{ result }}&#62;
+            span.result-notification Press enter to restart
 </template>
 
 <script>
 export default {
   name: 'app',
+
   data() {
     return {
-      startOpen: true,
-      loadingOpen: false,
-      testOpen: false,
-      resultOpen: false,
-      showResult: false,
-      answerActive: 1,
-      test: { question: 'How many roads does the man go down?', answer: [42, 56, 74, 102] },
-      code: ['Collecting you answers...', 'Compare answers with PL matrix...', 'Testing you patience...', 'Analizing...'],
-      result: ['Python', 'JS', 'Java', 'BeaverScript'],
+      phase: 0,
+      loading: false,
+      loaderPhrases: [
+        'Collecting your answers...',
+        'Comparing answers with PL matrix...',
+        'Testing your patience...',
+        'Analizing...'
+      ],
+      activePhrase: -1,
+
+      test: {
+        question: 'What is your purpose of studying?',
+        answers: [
+          'Web development',
+          'Software development',
+          'Mobile app development'
+        ],
+        '0': {
+          question: 'Do you like interacting with people?',
+          answers: [
+            'I\'m good with people',
+            'I hate them all'
+          ],
+          '0': {
+            question: 'Are you a creative person?',
+            answers: [
+              'I\'m a man of beauty',
+              'Functionality is more important for me'
+            ],
+            '0': 'HTML + CSS',
+            '1': 'JS'
+          },
+          '1': {
+            question: 'Are you a workaholic?',
+            answers: [
+              'Personal life is more important for me',
+              'Work is my credo'
+            ],
+            '0': {
+              question: 'Are you conservative or liberal?',
+              answers: [
+                'I love sorting out retro things',
+                'I\'m futurist'
+              ],
+              '0': 'PHP',
+              '1': 'Node.js'
+            },
+            '1': {
+              question: 'What kind kind of music do you prefer?',
+              answers: [
+                'Retrowave',
+                'Power metal',
+                'Alternative',
+                'Pop'
+              ],
+              '0': 'C',
+              '1': 'Java',
+              '2': 'Ruby',
+              '3': 'Python'
+            }
+          }
+        },
+        '1': {
+          question: 'How do you usually spend your free time?',
+          answers: [
+            'Gaming!',
+            'Reinstalling OS',
+            'Thinking of business ideas',
+            'Building my own C-3PO',
+            'Doing my homework'
+          ],
+          '0': {
+            question: 'Which type of game is the last you bought in Steam?',
+            answers: [
+              'Indie',
+              'AAA',
+              'Text'
+            ],
+            '0': 'C#/Python🎃',
+            '1': 'C#/C++🎃',
+            '2': 'C#/Python/C++/Java/JS/Delphi🎃'
+          },
+          '1': {
+            question: 'Which OS do you reinstall?',
+            answers: [
+              'Windows 😩',
+              'Linux (reboot now)',
+              'MacOS'
+            ],
+            '0': {
+              question: 'Which character would you be in the world of LOTR?',
+              answers: [
+                'J. R. R. Tolkien',
+                'Sauron',
+                'Gandalf',
+                'What is LOTR?',
+                'Treebeard',
+                'Dumbledore'
+              ],
+              '0': 'C',
+              '1': 'C++',
+              '2': 'Java',
+              '3': 'Rust',
+              '4': 'Delphi',
+              '5': 'Visual Basic'
+            },
+            '1': {
+              question: 'Which fiction film do you like?',
+              answers: [
+                'Star Trek (old)',
+                'Star Trek (new)',
+                'Star Wars',
+                'Men in black',
+                'Space Odyssey',
+                'Interstellar'
+              ],
+              '0': 'C',
+              '1': 'C++',
+              '2': 'Java',
+              '3': 'Python',
+              '4': 'Delphi',
+              '5': 'Go'
+            },
+            '2': {
+              question: 'Where would you spend your holidays?',
+              answers: [
+                'Home',
+                'Parent\'s home',
+                'Friend\'s home',
+                'Silicon Valley',
+                'Holidays?'
+              ],
+              '0': 'C',
+              '1': 'C++',
+              '2': 'Objective-C',
+              '3': 'Swift',
+              '4': 'Java'
+            }
+          },
+          '2': {
+            question: 'Which way would you choose to conquer the world?',
+            answers: [
+              'Political',
+              'Economical',
+              'Social',
+              'Military'
+            ],
+            '0': 'C++',
+            '1': 'Java',
+            '2': 'Python',
+            '3': 'Ada'
+          },
+          '3': {
+            question: 'Which genre of fiction do you prefer?',
+            answers: [
+              'Steampunk',
+              'Sci-fi',
+              'Cyberpunk'
+            ],
+            '0': 'Assembler',
+            '1': 'C',
+            '2': 'Go'
+          },
+          '4': {
+            question: 'Which subject would be the first?',
+            answers: [
+              'Math',
+              'Economics',
+              'Statistics',
+              'Informatics',
+              'Physics'
+            ],
+            '0': 'Matlab',
+            '1': 'Java',
+            '2': 'R',
+            '3': 'Python',
+            '4': 'C'
+          }
+        },
+        '2': {
+          question: 'CEO of which company would you like to be?',
+          answers: [
+            'Apple',
+            'Google',
+            'Windows'
+          ],
+          '0': {
+            question: 'Which coffee do you like?',
+            answers: [
+              'Latte',
+              'Сappuccino',
+              'Espresso'
+            ],
+            '0': 'Swift',
+            '1': 'Objective-C',
+            '2': 'Java'
+          },
+          '1': {
+            question: 'Which cuisine do you like?',
+            answers: [
+              'Chinese',
+              'European',
+              'Elvish',
+              'Mexican'
+            ],
+            '0': 'Objective-C',
+            '1': 'Java',
+            '2': 'JS',
+            '3': 'Python'
+          },
+          '2': {
+            question: 'Which cuisine do you like?',
+            answers: [
+              'Chinese',
+              'European',
+              'Elvish',
+              'Mexican'
+            ],
+            '0': 'Objective-C',
+            '1': 'Java',
+            '2': 'JS',
+            '3': 'Python'
+          }
+        }
+      },
+      activeAnswer: 0,
+      answersStack: [],
+      result: ''
     }
   },
+
+  mounted() {
+    document.addEventListener('keydown', this.onKeydown)
+  },
+
+  computed: {
+    activeTest() {
+      let result = this.test
+      this.answersStack.forEach(answer => {
+        result = result[answer]
+      })
+      if (typeof result !== 'string') return result
+      this.showResult(result)
+      return {}
+    },
+    loaderText() {
+      if (this.activePhrase == -1) return
+      return this.loaderPhrases[this.activePhrase]
+    }
+  },
+
   methods: {
-    start() {
-      this.startOpen = false;
-      this.loadingOpen = true;
+    showResult(result) {
+      this.phase = 2
+      this.loading = true
+      this.result = result
+
+      const timerId = setInterval(() => this.activePhrase++, 1500)
+      setTimeout(() => {
+        clearInterval(timerId)
+        this.loading = false
+      }, this.loaderPhrases.length * 1500)
     },
-    loading() {
-      this.loadingOpen = false;
-      this.testOpen = true;
-    },
-    chooseAnswer() {
-      this.answerActive++
-      console.log(this.answerActive)
-    },
-    timer() {
-      return 0;
-      // let i = 1;
-      // const timerId = setInterval(function() {
-      //   return i;
-      //   if (i == 20) clearInterval(timerId);
-      //   i++;
-      // }, 100);
+    onKeydown(e) {
+      if (this.phase == 0 && e.keyCode == 13) {
+        this.loading = true
+        setTimeout(() => {
+          this.phase = 1
+          this.loading = false
+        }, 1000)
+      } else if (this.phase == 1) {
+        if (e.keyCode == 13) {
+          this.answersStack.push(this.activeAnswer)
+        } else if (e.keyCode == 38) {
+          this.activeAnswer = this.activeAnswer > 0
+          ? this.activeAnswer - 1
+          : this.activeTest.answers.length - 1
+        } else if (e.keyCode == 40) {
+          this.activeAnswer = this.activeAnswer < this.activeTest.answers.length - 1
+          ? this.activeAnswer + 1
+          : 0
+        }
+      } else if (e.keyCode == 13) {
+        this.phase = 0
+        this.answersStack = []
+      }
     }
   }
 }
@@ -68,56 +327,44 @@ export default {
 <style lang='scss'>
 @import url('https://fonts.googleapis.com/css?family=VT323');
 
-$green: #1FF042;
-
 html {
   font-size: 10px;
 }
 body {
   font-family: 'VT323', monospace;
-  color: $green;
+  color: #1FF042;
   margin: 0;
   padding: 0;
 }
-.background {
+.screen {
   position: relative;
   width: 100%;
   height: 100vh;
   background-color: #141814;
 }
-.screen-outter {
+.screen-outer {
   position: absolute;
   top: 4%;
   left: calc(50% - 100rem / 2);
   width: 90%;
   max-width: 100rem;
   height: 92%;
-  background-color: #cfc19a;
+  background-color: #C9D9D3;
   border-radius: 4rem;
   border: 4px solid #2A2A2A;
 }
 .screen-inner {
   position: absolute;
-  top: 8%;
-  left: calc(50% - 90rem / 2);
-  width: 90%;
-  max-width: 90rem;
-  height: 84%;
-  background-color: #b9ab84;
-  border-radius: 8rem;
-}
-.screen {
-  position: absolute;
   top: 5%;
   left: 5%;
   width: 90%;
   height: 90%;
-  border-radius: 50% / 4rem;
+  border-radius: 3rem;
   background-color: #222;
   box-shadow: inset 0 0 10em 1em rgba(0, 0, 0, 0.5);
   border: 2px solid transparentize(#071007, 0.9);
 }
-.screen-overlay {
+.screen-glare {
   position: absolute;
   top: 5%;
   left: 5%;
@@ -135,7 +382,12 @@ body {
     height: 100%;
     border-radius: 50% / 4rem;
     z-index: 1001;
-    background-image: linear-gradient(0deg, transparent 0%, rgba(32,128,32,0.2) 2%, rgba(32,128,32,0.8) 3%, rgba(32,128,32,0.2) 3%, transparent 100%);
+    background-image: linear-gradient(0deg,
+                      transparent 0%,
+                      rgba(32,128,32,0.2) 2%,
+                      rgba(32,128,32,0.8) 3%,
+                      rgba(32,128,32,0.2) 3%,
+                      transparent 100%);
     background-repeat: no-repeat;
     animation: flash 7.5s linear 0s infinite;
   }
@@ -147,11 +399,16 @@ body {
     height: 100%;
     border-radius: 50% / 4rem;
     z-index: 1001;
-    background-image: radial-gradient(ellipse 50% 15% at 50% 15%, rgba(255, 255, 255, 0.05), transparent), radial-gradient(ellipse 50% 10% at 50% 12%, rgba(255, 255, 255, 0.1), transparent), radial-gradient(ellipse 50% 5% at 50% 10%, rgba(255, 255, 255, 0.1), transparent), radial-gradient(ellipse 50% 3% at 50% 9%, rgba(255, 255, 255, 0.1), transparent), radial-gradient(ellipse 200% 20% at 50% 0%, rgba(0, 0, 0, 0.5), transparent), linear-gradient(0deg, rgba(0, 0, 0, 0.2) 50%, transparent 50%);
+    background-image: radial-gradient(ellipse 50% 15% at 50% 15%, rgba(255, 255, 255, 0.05), transparent),
+                      radial-gradient(ellipse 50% 10% at 50% 12%, rgba(255, 255, 255, 0.1), transparent),
+                      radial-gradient(ellipse 50% 5% at 50% 10%, rgba(255, 255, 255, 0.1), transparent),
+                      radial-gradient(ellipse 50% 3% at 50% 9%, rgba(255, 255, 255, 0.1), transparent),
+                      radial-gradient(ellipse 200% 20% at 50% 0%, rgba(0, 0, 0, 0.5), transparent),
+                      linear-gradient(0deg, rgba(0, 0, 0, 0.2) 50%, transparent 50%);
     background-size: 100%, 100%, 100%, 100%, 100%, 100% 0.25ch;
   }
 }
-.test-heading {
+.start-title {
   position: absolute;
   top: 20%;
   left: calc(50% - 90% / 2);
@@ -160,7 +417,7 @@ body {
   font-size: 7rem;
   text-align: center;
 }
-.test-start {
+.start-notification {
   position: absolute;
   top: 60%;
   left: calc(50% - 40% / 2);
@@ -170,7 +427,7 @@ body {
   text-align: center;
   animation: blink 2s steps(1) infinite
 }
-.test-team {
+.team {
   position: absolute;
   text-transform: uppercase;
   bottom: 4rem;
@@ -196,35 +453,33 @@ body {
   justify-content: space-around;
 }
 .test-question {
-  font-size: 3rem;
-}
-.test-question {
-  font-size: 3rem;
-}
-.code {
-  font-size: 2rem;
+  font-size: 5rem;
 }
 .result-text {
-  font-size: 3rem;
+  font-size: 4rem;
 }
 .result-notification {
   font-size: 2rem;
   animation: blink 2s steps(1) infinite
 }
 .answer--active {
-  background-color: transparentize($green, 0.8);
+  background-color: transparentize(#1FF042, 0.8);
 }
-.answers {
+.test-answers {
+  font-size: 3rem;
   display: flex;
   flex-direction: column;
 }
-.loading {
+.answer {
+  font-size: 3.5rem;
+}
+.loader {
   position: absolute;
   bottom: 10rem;
   left: 10%;
   width: 60%;
 }
-.loader-heading, .loader-percent {
+.loader-title, .loader-percent {
   font-size: 4rem;
   margin: 0 1rem;
 }
