@@ -9,8 +9,8 @@
           span.team pxlhead tm
           .loader(v-if='loading')
             span.loader-title Loading
-            span.loader-bar
-            span.loader-percent
+            span.loader-bar [#############]
+            span.loader-percent [0%]
         .test(v-if='phase == 1')
           h3.test-question {{ activeTest.question }}
           .test-answers
@@ -20,8 +20,6 @@
         .result(v-if='phase == 2')
           .loader(v-if='loading')
             span.loader-title {{ loaderText }}
-            span.loader-bar
-            span.loader-percent
           .result-message(v-else)
             h3.result-text We suggest you to try &#60;{{ result }}&#62;
             span.result-notification Press enter to restart
@@ -88,7 +86,7 @@ export default {
                 'Alternative',
                 'Pop'
               ],
-              '0': 'C',
+              '0': 'C#',
               '1': 'Java',
               '2': 'Ruby',
               '3': 'Python'
@@ -344,22 +342,22 @@ body {
 }
 .screen-outer {
   position: absolute;
-  top: 4%;
-  left: calc(50% - 100rem / 2);
+  top: 5%;
+  left: calc(50% - 120rem / 2);
   width: 90%;
-  max-width: 100rem;
-  height: 92%;
+  max-width: 120rem;
+  height: 90%;
   background-color: #C9D9D3;
-  border-radius: 4rem;
+  border-radius: 50% / 4rem;
   border: 4px solid #2A2A2A;
 }
 .screen-inner {
   position: absolute;
-  top: 5%;
-  left: 5%;
-  width: 90%;
-  height: 90%;
-  border-radius: 3rem;
+  top: 7.5%;
+  left: 7.5%;
+  width: 85%;
+  height: 85%;
+  border-radius: 50% / 4rem;
   background-color: #222;
   box-shadow: inset 0 0 10em 1em rgba(0, 0, 0, 0.5);
   border: 2px solid transparentize(#071007, 0.9);
@@ -459,7 +457,7 @@ body {
   font-size: 4rem;
 }
 .result-notification {
-  font-size: 2rem;
+  font-size: 3rem;
   animation: blink 2s steps(1) infinite
 }
 .answer--active {
@@ -477,7 +475,7 @@ body {
   position: absolute;
   bottom: 10rem;
   left: 10%;
-  width: 60%;
+  width: 80%;
 }
 .loader-title, .loader-percent {
   font-size: 4rem;
