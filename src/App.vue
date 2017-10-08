@@ -103,15 +103,79 @@ export default {
             'Doing my homework'
           ],
           '0': {
-            question: 'Which type of game is the last you bought in Steam?',
+            question: 'Which type of game you play last time?',
             answers: [
               'Indie',
               'AAA',
-              'Text'
+              'Text',
+              'MMORPG'
             ],
-            '0': 'C#/Python🎃',
-            '1': 'C#/C++🎃',
-            '2': 'C#/Python/C++/Java/JS/Delphi🎃'
+            '0': {
+              question: 'Which styles of visual art do you prefer?',
+              answers: [
+                'Realism',
+                'Surrealism',
+                'Cubism',
+                'Post-modernism',
+                'Avant-garde',
+                'Primitivism'
+              ],
+              '0': 'C++',
+              '1': 'C#',
+              '2': 'Java',
+              '3': 'Python',
+              '4': 'JS',
+              '5': 'Delphi'
+            },
+            '1': {
+              question: 'What is you favourite weapon in games?',
+              answers: [
+                'Bow to shot at someone\'s knee',
+                'Magic/Biotics/Psyonics',
+                'Knife (no matter what game it is)'
+              ],
+              '0': 'C++',
+              '1': 'C#',
+              '2': 'Java'
+            },
+            '2': {
+              question: 'Which type of literature whould you choose?',
+              answers: [
+                'Fantasy',
+                'Sci-fi',
+                'Manual/Docs/Guide',
+                'Documentary',
+                'Classic',
+                'Novel',
+                'Comics (OMG)'
+              ],
+              '0': 'C++',
+              '1': 'C#',
+              '2': 'Java',
+              '3': 'Python',
+              '4': 'Delphi',
+              '5': 'JS',
+              '6': 'ActionScript'
+            },
+            '3': {
+              question: 'Which fictional race would you like to be?',
+              answers: [
+                'Hafling',
+                'Dwarf',
+                'Klingon',
+                'Borg',
+                'Wookiee',
+                'Azari',
+                'Troll'
+              ],
+              '0': 'C++',
+              '1': 'C#',
+              '2': 'Java',
+              '3': 'Python',
+              '4': 'Delphi',
+              '5': 'JS',
+              '6': 'ActionScript'
+            }
           },
           '1': {
             question: 'Which OS do you reinstall?',
